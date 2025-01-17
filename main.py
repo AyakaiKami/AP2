@@ -1,13 +1,15 @@
 from pandas import *
 from utils import data_parser
 
+from algs import linear_regression
+
 from sklearn import linear_model
 
 import numpy as np
 
 file_path="Data/tourism_dataset.csv"
 
-GET_INPUT = True
+GET_INPUT = False
 
 LINEAR_REGRESSION = 0
 ALGORITHM_USED = LINEAR_REGRESSION
@@ -15,7 +17,7 @@ ALGORITHM_USED = LINEAR_REGRESSION
 
 whole_data = data_parser.load_data(file_path)
 
-country = "India" if GET_INPUT == False else input("Give a country for which to estimate the revenue: ")
+country = "Egypt" if GET_INPUT == False else input("Give a country for which to estimate the revenue: ")
 
 whole_data = whole_data[whole_data[:,1]==country]
 if whole_data.size == 0:
@@ -35,7 +37,13 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     t_1 = np.array(t_1,dtype=np.float64)
 
     reg = linear_model.LinearRegression()
+    reg2 = linear_regression.LinearRegression()
     reg.fit(a_1,t_1)
+    #linear_regression.train(a_1,t_1,20)
+    reg2.train(a_1,t_1,10000)
+
+
+    print(reg.coef_, reg2.weights())
 
 
     # Testing data
@@ -43,7 +51,8 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     a_2 = np.array(a_2,dtype=np.float64)
     t_2 = np.array(t_2,dtype=np.float64)
 
-    predictions = reg.predict(a_2)
+    #predictions = reg.predict(a_2)
+    predictions = reg2.predict(a_2)
     real        = t_2
 
     categoryPredictions = {}
@@ -66,7 +75,7 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     ranking_pred = sorted(final_ranking,key=lambda x:x[1],reverse=True)
     ranking_real = sorted(final_ranking,key=lambda x:x[2],reverse=True)
     for x, y in zip(ranking_pred,ranking_real):
-        print(x[0],y[0])
+        print(x,y)        
         #print(f'Category: {key} | Pred: {categoryPredictions[key]}| Real:{categoryReals[key]}')
 
     
