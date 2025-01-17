@@ -1,8 +1,7 @@
 from pandas import *
 from utils import data_parser
 
-from algs import linear_regression
-
+from algs import linear_regression, regression_tree
 from sklearn import linear_model, tree
 
 import numpy as np
@@ -18,7 +17,7 @@ ALGORITHM_USED = REGRESSION_TREE
 
 whole_data = data_parser.load_data(file_path)
 
-country = "Egypt" if GET_INPUT == False else input("Give a country for which to estimate the revenue: ")
+country = "France" if GET_INPUT == False else input("Give a country for which to estimate the revenue: ")
 
 whole_data = whole_data[whole_data[:,1]==country]
 if whole_data.size == 0:
@@ -87,14 +86,16 @@ elif ALGORITHM_USED == REGRESSION_TREE:
     a_1 = np.array(a_1,dtype=np.float64)
     t_1 = np.array(t_1,dtype=np.float64)
 
-    rt = tree.DecisionTreeRegressor()
-    rt = rt.fit(a_1,t_1)
+    #rt = tree.DecisionTreeRegressor()
+    #rt = rt.fit(a_1,t_1)
+    rt = regression_tree.ID3((a_1,t_1),10)
 
     # Testing data
     a_2, t_2 = data_parser.split_attrib_target(vd,3)
     a_2 = np.array(a_2,dtype=np.float64)
     t_2 = np.array(t_2,dtype=np.float64)
 
+    #predictions = rt.predict(a_2)
     predictions = rt.predict(a_2)
     #predictions = reg2.predict(a_2)
     real        = t_2
@@ -122,7 +123,8 @@ elif ALGORITHM_USED == REGRESSION_TREE:
     ranking_pred = sorted(final_ranking,key=lambda x:x[1],reverse=True)
     ranking_real = sorted(final_ranking,key=lambda x:x[2],reverse=True)
     for x, y in zip(ranking_pred,ranking_real):
-        print(x[0],y[0])        
+        print(x[0],y[0])            
+        #print(y)
 
     pass
     
