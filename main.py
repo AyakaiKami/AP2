@@ -12,7 +12,7 @@ GET_INPUT = False
 
 LINEAR_REGRESSION = 0
 REGRESSION_TREE = 1
-ALGORITHM_USED = REGRESSION_TREE
+ALGORITHM_USED = LINEAR_REGRESSION
 
 
 whole_data = data_parser.load_data(file_path)
@@ -37,13 +37,12 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     t_1 = np.array(t_1,dtype=np.float64)
 
     reg = linear_model.LinearRegression()
-    reg2 = linear_regression.LinearRegression()
-    reg.fit(a_1,t_1)
+    #reg2 = linear_regression.LinearRegression()
+    #reg.fit(a_1,t_1)
     #linear_regression.train(a_1,t_1,20)
-    reg2.train(a_1,t_1,10000)
+    #reg2.train(a_1,t_1,10000)
 
 
-    print(reg.coef_, reg2.weights())
 
 
     # Testing data
@@ -51,8 +50,8 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     a_2 = np.array(a_2,dtype=np.float64)
     t_2 = np.array(t_2,dtype=np.float64)
 
-    #predictions = reg.predict(a_2)
-    predictions = reg2.predict(a_2)
+    predictions = reg.predict(a_2)
+    #predictions = reg2.predict(a_2)
     real        = t_2
 
     categoryPredictions = {}
@@ -76,7 +75,7 @@ if ALGORITHM_USED in {LINEAR_REGRESSION}:
     ranking_real = sorted(final_ranking,key=lambda x:x[2],reverse=True)
     for x, y in zip(ranking_pred,ranking_real):
         print(x,y)        
-        #print(f'Category: {key} | Pred: {categoryPredictions[key]}| Real:{categoryReals[key]}')
+    
 elif ALGORITHM_USED == REGRESSION_TREE:
     data_parser.convert_to_numeric(whole_data)
     td, vd = data_parser.split_train_validation(whole_data,0.9)
